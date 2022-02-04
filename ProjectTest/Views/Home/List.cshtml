@@ -1,0 +1,76 @@
+﻿<div ng-controller="ListController" ng-init="Init();">
+    <br />
+    <h3><i class="far fa-file-alt"></i> &nbsp;รายการเอกสาร</h3>
+    <hr style="width:100%;border-width:3px;" />
+    <div class="row">
+        <div class="col-auto">
+            <a class="text-black-50" style="font-family:'TH SarabunPSK';font-size:25px">ค้นหา</a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" size="50" ng-model="search" >
+        </div>
+    </div>
+    <br />
+
+    <table class="table table-striped table-bordered " style="text-align:center;">
+        <thead>
+            <tr>
+                <th>วันที่</th>
+                <th>เลขที่เอกสาร</th>
+                <th>ชื่อเอกสาร</th>
+                <th>ส่วนงาน</th>
+                <th>ผู้ดูแล</th>
+                <th>ตู้เก็บเอกสาร</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in dataDoc | filter : search">
+                <td>{{item.tdate | date : 'dd/MM/yyyy'}}</td>
+                <td>{{item.no}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.department}}</td>
+                <td>{{item.responsible}}</td>
+                <td>{{item.locker}}</td>
+                <td>
+                    <a class="btn btn-success btn-md text-white" ng-click=""><i class="fas fa-download"></i>&nbsp;ดาวน์โหลด</a>
+                    <a class="btn btn-info btn-md text-white" ng-click="ShowModalDetail(item.no);"><i class="far fa-eye"></i>&nbsp;เปิดไฟล์</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-left" style="background-color:deepskyblue">
+                    <h4 class="modal-title w-100 font-weight-bold text-white">รายละเอียด</h4>
+                </div>
+                <form>
+                    <div class="modal-body mx-3 text-left">
+                        <div class="form-group">
+                            <label>ชื่อเอกสาร<a class="text-danger">*</a></label>
+                            <a class="text-blue">{{dataPerDoc.name}}</a>
+                        </div>
+                        <div class="form-group">
+                            <label>ผู้อัปโหลด<a class="text-danger">*</a></label>
+                            <a class="text-blue">{{dataPerDoc.uploader}}</a>
+                        </div>
+                        <div class="form-group">
+                            <label>อัปโหลดเมื่อ<a class="text-danger">*</a></label>
+                            <a class="text-blue">{{dataPerDoc.tdate | date : 'dd MMMM yyyy'}}</a>
+                        </div>
+                        <div class="form-group">
+                            <label>ความจุ<a class="text-danger">*</a></label>
+                            <a class="text-blue">1.2 MB</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/app/controller/ListController.js"></script>
+}
+

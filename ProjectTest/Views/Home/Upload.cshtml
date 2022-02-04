@@ -1,0 +1,187 @@
+﻿<div ng-controller="UpController" ng-init="Init();">
+    <br />
+    <h3><i class="far fa-file-alt"></i> &nbsp;อัปโหลด/แก้ไขเอกสาร</h3>
+    <hr style="width:100%;border-width:3px;" />
+    <div class="row">
+        <div class="col-auto">
+            <a class="text-black-50" style="font-family:'TH SarabunPSK';font-size:25px">ค้นหา</a>
+        </div>
+        <div class="col-auto">
+            <input type="text" class="form-control" size="50" ng-model="search">
+        </div>
+
+
+        <div class="col-auto">
+            <a class="btn btn-info btn-md text-white" ng-click="ShowModalAdd();"><i class="fas fa-plus-circle"></i>&nbsp; Document</a>
+
+        </div>
+    </div>
+    <br />
+    <table class="table table-striped table-bordered " style="text-align:center;">
+        <thead>
+            <tr>
+                <th>วันที่</th>
+                <th>เลขที่เอกสาร</th>
+                <th>ชื่อเอกสาร</th>
+                <th>ส่วนงาน</th>
+                <th>ผู้ดูแล</th>
+                <th>ตู้เก็บเอกสาร</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in dataDoc | filter : search" >
+                <td>{{item.tdate | date : 'dd/MM/yyyy'}}</td>
+                <td>{{item.no}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.department}}</td>
+                <td>{{item.responsible}}</td>
+                <td>{{item.locker}}</td>
+                <td>
+                    <a class="btn btn-warning btn-md text-white" ng-click="ShowModalEdit(item.no);"><i class="far fa-edit"></i>&nbsp;แก้ไข</a>
+                    <a class="btn btn-danger btn-md text-white" ng-click="Delete(item.no);"><i class="fas fa-trash-alt"></i>&nbsp;ลบ</a>
+
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+  
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-left" style="background-color:deepskyblue">
+                    <h4 class="modal-title w-100 font-weight-bold text-white">เพิ่มเอกสาร</h4>
+                </div>
+                <form>
+                    <div class="modal-body mx-3 text-left">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label>RQE<a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" ng-model="doc.rqe" maxlength="10"  required>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label>เลขที่เอกสาร<a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" ng-model="doc.no" maxlength="10" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>ชื่อโครงการ<a class="text-danger">*</a></label>
+                            <input type="text" class="form-control" ng-model="doc.nameproj" required>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label>ปีงบประมาณ<a class="text-danger">*</a></label>
+                                <input type="text" class="form-control" ng-model="doc.year" required>
+                            </div>
+                            <div class="form-group col-sm-8">
+                                <label>ชื่อเอกสาร<a class="text-danger">*</a></label>
+                                <select class="form-control" ng-model="doc.name" required>
+                                    <option ng-repeat="item in name" ng-value="item.configDescript">{{item.configDescript}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-8">
+                                <label>ผู้ดูแล<a class="text-danger">*</a></label>
+                                <select class="form-control" ng-model="doc.responsible" required>
+                                    <option ng-repeat="item in responsi" ng-value="item.configDescript">{{item.configDescript}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>ส่วนงาน<a class="text-danger">*</a></label>
+                                <select class="form-control" ng-model="doc.department" required>
+                                    <option ng-repeat="item in department" ng-value="item.configDescript">{{item.configDescript}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>ตู้เก็บเอกสาร<a class="text-danger">*</a></label>
+                            <select class="form-control" ng-model="doc.locker" required>
+                                <option ng-repeat="item in locker" ng-value="item.configDescript">{{item.configDescript}}</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-7">
+                                <label>ผู้อัปโหลด<a class="text-danger">*</a></label>
+                                <select class="form-control" ng-model="doc.uploader" required>
+                                    <option ng-repeat="item in uploader" ng-value="item.configDescript">{{item.configDescript}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>วันที่<a class="text-danger">*</a></label>
+                                <input type="date" class="form-control" ng-model="doc.tdate" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="fileName1" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document/*,.pdf" multiple="multiple" ng-file-model="doc.filename" required>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                        <button type="submit" class="btn btn-sm btn-success" ng-click="AddNew(doc);">บันทึก</button>
+                        <button class="btn btn-sm btn-dark" ng-click="ResetForm();" data-dismiss="modal">ปิด</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-left" style="        background-color: #FFBF00">
+                    <h4 class="modal-title w-100 font-weight-bold text-white">แก้ไขเอกสาร</h4>
+                </div>
+                <form>
+                    <div class="modal-body mx-3 text-left">
+                        <div class="form-group">
+                            <label>เลขที่เอกสาร<a class="text-danger">*</a></label>
+                            <input type="text" class="form-control" ng-model="dataPerDoc.no">
+                        </div>
+                        <div class="form-group">
+                            <label>ชื่อเอกสาร<a class="text-danger">*</a></label>
+                            <select class="form-control" ng-model="dataPerDoc.name" required>
+                                <option ng-repeat="item in name" ng-value="item.configDescript">{{item.configDescript}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ส่วนงาน<a class="text-danger">*</a></label>
+                            <select class="form-control" ng-model="dataPerDoc.department" required>
+                                <option ng-repeat="item in department" ng-value="item.configDescript">{{item.configDescript}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ผู้ดูแล<a class="text-danger">*</a></label>
+                            <select class="form-control" ng-model="dataPerDoc.responsible" required>
+                                <option ng-repeat="item in responsi" ng-value="item.configDescript">{{item.configDescript}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ตู้เก็บเอกสาร<a class="text-danger">*</a></label>
+                            <select class="form-control" ng-model="dataPerDoc.locker" required>
+                                <option ng-repeat="item in locker" ng-value="item.configDescript">{{item.configDescript}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>วันที่<a class="text-danger">*</a></label>
+                            <input type="text" class="form-control" ng-model="dataPerDoc.tdate" readonly />
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-end">
+                        <button type="submit" class="btn btn-sm btn-success" ng-click="Update(dataPerDoc);">อัปเดต </button>
+                        <button class="btn btn-sm btn-dark" ng-click="ResetForm();" data-dismiss="modal">ปิด</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/js/app/controller/UpController.js"></script>
+}
+
